@@ -4,7 +4,9 @@ import datetime
 import os
 import argparse
 
-def organize_files_by_creation_date(target_directory: str, output_directory: str):
+
+def organize_files_by_creation_date(target_directory: str,
+                                    output_directory: str):
     target_path = pathlib.Path(target_directory)
     output_path = pathlib.Path(output_directory)
 
@@ -22,15 +24,16 @@ def organize_files_by_creation_date(target_directory: str, output_directory: str
 
             date_folder_name = creation_date.strftime('%Y%m%d')
 
-            extension = file.suffix[1:].upper() if file.suffix else 'no_extension'
+            extension = \
+                file.suffix[1:].upper() if file.suffix else 'no_extension'
 
             destination_dir = output_path / date_folder_name / extension
 
             destination_dir.mkdir(parents=True, exist_ok=True)
 
             shutil.move(file, destination_dir / file.name)
-            print(f"移動: {file.name} -> {destination_dir.relative_to(output_path)}")
-
+            relative_path = destination_dir.relative_to(output_path)
+            print(f"移動: {file.name} -> {relative_path}")
         except Exception as e:
             print(f"エラー: {file.name} の処理中に問題が発生しました - {e}")
 
